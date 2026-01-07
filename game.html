@@ -69,6 +69,7 @@
                 <div class="text-right">
                     <p class="text-xs text-gray-500 uppercase tracking-wide">Portfolio Value</p>
                     <p id="wallet-display" class="text-2xl font-bold text-emerald-600 transition-all duration-300">$1,000</p>
+                    <p id="profit-display" class="text-sm font-medium text-gray-400 mt-1">Profit: $0</p>
                 </div>
             </div>
 
@@ -376,6 +377,7 @@
         // --- DOM Elements ---
         const ui = {
             wallet: document.getElementById('wallet-display'),
+            profitDisplay: document.getElementById('profit-display'),
             turn: document.getElementById('turn-display'),
             slider: document.getElementById('invest-slider'),
             investDisplay: document.getElementById('invest-amount-display'),
@@ -441,6 +443,8 @@
             // UI Reset
             ui.wallet.innerText = `$${state.balance.toLocaleString()}`;
             ui.wallet.className = "text-2xl font-bold text-emerald-600 transition-all duration-300";
+            ui.profitDisplay.innerText = "Profit: $0";
+            ui.profitDisplay.className = "text-sm font-medium text-gray-400 mt-1";
             ui.modal.classList.add('hidden');
             // Ensure welcome modal is hidden on restart (it only shows on page load)
             // But if user wants to see instructions again? Usually restart implies playing again immediately.
@@ -663,6 +667,13 @@
             } else {
                 ui.wallet.className = "text-2xl font-bold text-emerald-600 transition-all duration-300";
             }
+
+            // Update Profit Display
+            const currentProfit = state.balance - config.startBalance;
+            const sign = currentProfit >= 0 ? "+" : "-";
+            const colorClass = currentProfit >= 0 ? "text-emerald-500" : "text-red-500";
+            ui.profitDisplay.innerText = `Profit: ${sign}$${Math.abs(currentProfit).toLocaleString()}`;
+            ui.profitDisplay.className = `text-sm font-medium ${colorClass} mt-1`;
 
             updateProgressBar();
             addLog(logMsg, logClass);
